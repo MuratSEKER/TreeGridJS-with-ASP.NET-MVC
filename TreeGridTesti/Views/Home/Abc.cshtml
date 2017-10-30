@@ -1,0 +1,67 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Abc</title>
+    <script src="~/Scripts/jquery-3.2.1.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.16/datatables.min.css" />
+    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.16/datatables.min.js"></script>
+
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/Content/jquery.treegrid.css">
+    <script type="text/javascript" src="~/Scripts/jquery.treegrid.js"></script>
+    <script type="text/javascript" src="~/Scripts/jquery.treegrid.bootstrap3.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            CategoryList();
+            $('.tree').treegrid();
+        });
+
+        function CategoryList() {
+            $('#list').DataTable(
+                {
+                    ajax: {
+                        "url": '/Home/GetList/',
+                        "type": "GET",
+                        "dataType": "Json",
+                        async: false
+                    },
+                    columns: [
+                        { "data": "Id" },
+                        { "data": "Name" },
+                        { "data": "RootId", visible:false }
+                    ],
+                    createdRow: function (row, data, dataIndex) {
+                        //alert(data.RootId);
+                        if (data.RootId == null) {
+                            $(row).addClass('treegrid-'+data.Id);
+                        } else {
+                            $(row).addClass('treegrid-' + data.Id + ' treegrid-parent-' + data.RootId);
+                        }
+                    }
+                }
+            )
+        }
+    </script>
+</head>
+<body>
+    <div>
+        <table class="tree" id="list">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th></th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</body>
+</html>

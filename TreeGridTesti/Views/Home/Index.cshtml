@@ -1,0 +1,52 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/Content/jquery.treegrid.css">
+    <script src="~/Scripts/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/jquery.treegrid.js"></script>
+    <script type="text/javascript" src="~/Scripts/jquery.treegrid.bootstrap3.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            CategoryList();
+            $('.tree').treegrid();
+        });
+
+
+        function CategoryList() {
+            $.ajax({
+                url: '/Home/GetCategories/',
+                type: 'GET',
+                dataType: 'Json',
+                async: false,
+                success: function (data) {
+                    for (var i = 0; i < data.length; i++) {
+                        if (data[i].RootId == null) {
+                            $('#list').append('<tr class="treegrid-' + data[i].Id + '"><td>' + data[i].Name + '</tr>');
+                        } else {
+                            $('#list').append('<tr class="treegrid-' + data[i].Id + ' treegrid-parent-' + data[i].RootId + '"><td>' + data[i].Name + '</tr>');
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+    <div>
+        <table class="tree" id="list">
+
+          
+        </table>
+    </div>
+</body>
+</html>
